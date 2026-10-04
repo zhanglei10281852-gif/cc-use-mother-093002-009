@@ -3,7 +3,7 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parents[1] / "src"))
-from consent_governance.contracts import ConsentVersion, DatasetSource
+from consent_governance.contracts import ConsentVersion, DatasetSource, EventKind, NodeState
 
 
 class ContractTests(unittest.TestCase):
@@ -15,6 +15,12 @@ class ContractTests(unittest.TestCase):
     def test_invalid_revision_is_rejected(self):
         with self.assertRaises(ValueError):
             ConsentVersion("E-2", "无效版本", 0)
+
+    def test_event_kinds(self):
+        self.assertTrue(EventKind.AGREE.is_grant)
+        self.assertTrue(EventKind.REAGREE.is_grant)
+        self.assertFalse(EventKind.WITHDRAW.is_grant)
+        self.assertEqual(NodeState.HISTORICAL_LOCKED.value, "historical_locked")
 
 
 if __name__ == "__main__":
